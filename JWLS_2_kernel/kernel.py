@@ -1,5 +1,6 @@
 from ipykernel.kernelbase import Kernel
 import os
+import re
 
 ######################################################################################
 def wl_response(wl_cell):
@@ -28,9 +29,12 @@ class JWLS_2_kernel(Kernel):
     def do_execute(self, code, silent, store_history=False, user_expressions=None,
                    allow_stdin=False):
                        
-
-        stream_content = {'name': 'stdout', 'text': wl_response(code)}
-        self.send_response(self.iopub_socket, 'stream', stream_content)
+#        if not re.match('^InputForm\[.*\]$|^.*//InputForm$', code):
+#            code = 'InputForm['+code+"]"
+        stream_content = wl_response(code)
+#        if re.match('^InputForm\[.*\]$', stream_content):
+#            stream_content = stream_content[10:-1]
+        self.send_response(self.iopub_socket, 'stream', {'name': 'stdout', 'text': stream_content})
 
         return {'status': 'ok',
                 'execution_count': self.execution_count,

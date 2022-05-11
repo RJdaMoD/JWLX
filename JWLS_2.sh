@@ -34,6 +34,7 @@ nbAddrF := ReadString["!" <> $jupyterPath <> "-notebook list"] ~
 $nbAddr =  nbAddrF // Echo
 
 (*$Output = {}*)
+SetOptions[$Output, FormatType -> InputForm]
 
 Off[General::stop] 
 
